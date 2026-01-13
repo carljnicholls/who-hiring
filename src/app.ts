@@ -1,4 +1,5 @@
 import { HnService } from "./services/hn-service.js";
+import { Temporal } from "@js-temporal/polyfill";
 import { ConsoleLogger } from "./services/console-logger.js";
 import { IoService } from "./services/io-service.js";
 import { loadConfig } from "./services/config-service.js";
@@ -7,7 +8,8 @@ const logPrefix = `[HM WHO IS HIRING]`;
 const logger = ConsoleLogger.getInstance();
 
 const run = async () => {
-    const startDate = new Date();
+    const startDate = Temporal.Now.instant();
+
     try {
         logger.log(`${logPrefix} Starting at ${startDate}`);
         process.loadEnvFile(`.env`);
@@ -23,12 +25,14 @@ const run = async () => {
     } catch (error) {
         logger.error(`${logPrefix} Error fetching: `, error);
     } finally {
-        const finTime = new Date();
+        const finTime = Temporal.Now.instant();
         logger.log(`${logPrefix} Finished at ${finTime}`);
         logger.log(
             `${logPrefix} Duration: ${
-                finTime.getTime() - startDate.getTime()
-            } ms`
+                finTime.since(startDate)
+                    .total({ unit: "second" })
+                    .toFixed(1)
+            } s`
         );
     }
 };

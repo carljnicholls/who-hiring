@@ -1,5 +1,6 @@
 import { DatabaseSync } from "node:sqlite";
 import { BaseSerializer } from "./base-serializer";
+import { Temporal } from "@js-temporal/polyfill";
 
 export class SqlLiteSerializer extends BaseSerializer {
     serialize<T>(data: T, options?: any): Promise<void> {
@@ -140,7 +141,7 @@ export class SqlLiteSerializer extends BaseSerializer {
             `INSERT INTO Audits (time, by) VALUES (?, ?)`
         );
         const result = auditsQuery.run(
-            time ?? new Date().getTime(),
+            time ?? Temporal.Now.instant().epochMilliseconds,
             by ?? "unknown"
         );
 

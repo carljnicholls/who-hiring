@@ -13,6 +13,7 @@
     "author": "Carl Nicholls",
     "license": "MIT",
     "dependencies": {
+        "@js-temporal/polyfill": "^0.5.1",
         "ajv": "^8.17.1",
         "ajv-formats": "^3.0.1"
     },
